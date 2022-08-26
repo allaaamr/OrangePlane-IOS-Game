@@ -13,6 +13,7 @@
 		B640AFB728B8FBFD008D1F1C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B640AFB528B8FBFD008D1F1C /* Main.storyboard */; };
 		B640AFB928B8FBFF008D1F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B640AFB828B8FBFF008D1F1C /* Assets.xcassets */; };
 		B640AFBC28B8FBFF008D1F1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B640AFBA28B8FBFF008D1F1C /* LaunchScreen.storyboard */; };
+		B640AFC828B8FC9B008D1F1C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640AFC728B8FC9B008D1F1C /* GameScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		B640AFB828B8FBFF008D1F1C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B640AFBB28B8FBFF008D1F1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B640AFBD28B8FBFF008D1F1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B640AFC728B8FC9B008D1F1C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		B640AFAE28B8FBFD008D1F1C /* OrangePlane */ = {
 			isa = PBXGroup;
 			children = (
+				B640AFC728B8FC9B008D1F1C /* GameScene.swift */,
 				B640AFAF28B8FBFD008D1F1C /* AppDelegate.swift */,
 				B640AFB128B8FBFD008D1F1C /* SceneDelegate.swift */,
 				B640AFB328B8FBFD008D1F1C /* ViewController.swift */,
@@ -140,6 +143,7 @@
 			files = (
 				B640AFB428B8FBFD008D1F1C /* ViewController.swift in Sources */,
 				B640AFB028B8FBFD008D1F1C /* AppDelegate.swift in Sources */,
+				B640AFC828B8FC9B008D1F1C /* GameScene.swift in Sources */,
 				B640AFB228B8FBFD008D1F1C /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
