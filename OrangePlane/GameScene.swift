@@ -102,15 +102,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             topWall.run(moveAndRemovePipes)
             topWall.physicsBody = SKPhysicsBody(rectangleOf: topTexture.size())
             topWall.physicsBody!.contactTestBitMask = CollideType.Wall.rawValue
-            topWall.physicsBody!.categoryBitMask = CollideType.Bird.rawValue
-            topWall.physicsBody!.collisionBitMask = CollideType.Bird.rawValue
+            topWall.physicsBody!.categoryBitMask = CollideType.Wall.rawValue
+            topWall.physicsBody!.collisionBitMask = CollideType.Wall.rawValue
             topWall.physicsBody!.isDynamic = false
             
             bottomWall.run(moveAndRemovePipes)
             bottomWall.physicsBody = SKPhysicsBody(rectangleOf: bottomTexture.size())
             bottomWall.physicsBody!.contactTestBitMask = CollideType.Wall.rawValue
-            bottomWall.physicsBody!.categoryBitMask = CollideType.Bird.rawValue
-            bottomWall.physicsBody!.collisionBitMask = CollideType.Bird.rawValue
+            bottomWall.physicsBody!.categoryBitMask = CollideType.Wall.rawValue
+            bottomWall.physicsBody!.collisionBitMask = CollideType.Wall.rawValue
             bottomWall.physicsBody!.isDynamic = false
             
             wallPair.addChild(topWall)
