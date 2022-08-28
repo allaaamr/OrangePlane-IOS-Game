@@ -13,9 +13,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOver: Bool = false
     var gameStarted: Bool = false
     
-    enum CollideType: UInt32 {
-        case Bird = 1
-        case Wall = 2
+    enum CType: UInt32 {
+        case Plane = 1
+        case Pipe = 2
         case Gap = 4
     }
     
@@ -42,8 +42,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
    
-    func drawPlane(){
-        //
+    func drawPlane() -> Void {
+        let planeTexture = SKTexture(imageNamed: "plane1.png")
+        let planeTexture2 = SKTexture(imageNamed: "plane2.png")
+        let animation = SKAction.animate(with: [planeTexture, planeTexture2], timePerFrame: 0.1)
+        let planeFlying = SKAction.repeatForever(animation)
+        plane = SKSpriteNode(texture: planeTexture)
+        plane.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        plane.run(planeFlying)
+        plane.physicsBody = SKPhysicsBody(circleOfRadius: planeTexture.size().height / 2)
+        plane.physicsBody!.isDynamic = false
+        plane.physicsBody!.contactTestBitMask = CType.Pipe.rawValue
+        plane.physicsBody!.categoryBitMask = CType.Plane.rawValue
+        plane.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        self.addChild(plane)
+        
     }
    
     func drawBackground(){
@@ -64,60 +77,62 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func drawObstacles(){
-        
+    @objc func drawPipes() -> Void {
+ 
         if(gameStarted){
             let gapHeight = plane.size.height * 2
-            
-            let movePipes = SKAction.move(
-                by: CGVector(dx: -2 * self.frame.width, dy: 0),
-                duration: TimeInterval(self.frame.width / 100)
-            )
+        let movePipes = SKAction.move(
+            by: CGVector(dx: -2 * self.frame.width, dy: 0),
+            duration: TimeInterval(self.frame.width / 100)
+        )
 
-            let removePipes = SKAction.removeFromParent()
+        let removePipes = SKAction.removeFromParent()
 
-            let movementAmount = arc4random() % UInt32(self.frame.height / 2)
-            let moveAndRemovePipes = SKAction.sequence([movePipes, removePipes])
+        let movementAmount = arc4random() % UInt32(self.frame.height / 2)
 
-            let pipeOffset = CGFloat(movementAmount) - self.frame.height / 4
-                
-            let wallPair = SKNode()
-            
-            let topTexture = SKTexture(imageNamed: "topWall.png")
-            let topWall = SKSpriteNode(texture: topTexture)
-            
-            let bottomTexture = SKTexture(imageNamed: "bottomWall.png")
-            let bottomWall = SKSpriteNode(texture: bottomTexture)
+        let moveAndRemovePipes = SKAction.sequence([movePipes, removePipes])
 
-            topWall.position = CGPoint(
-                x: self.frame.midX + self.frame.width,
-                y: self.frame.midY + topTexture.size().height / 2 + gapHeight / 2 + pipeOffset
-            )
-            
-            bottomWall.position = CGPoint(
-                x: self.frame.midX + self.frame.width,
-                y: self.frame.midY + bottomTexture.size().height / 2 - gapHeight / 2  + pipeOffset
-            )
-            
-            topWall.run(moveAndRemovePipes)
-            topWall.physicsBody = SKPhysicsBody(rectangleOf: topTexture.size())
-            topWall.physicsBody!.contactTestBitMask = CollideType.Wall.rawValue
-            topWall.physicsBody!.categoryBitMask = CollideType.Wall.rawValue
-            topWall.physicsBody!.collisionBitMask = CollideType.Wall.rawValue
-            topWall.physicsBody!.isDynamic = false
-            
-            bottomWall.run(moveAndRemovePipes)
-            bottomWall.physicsBody = SKPhysicsBody(rectangleOf: bottomTexture.size())
-            bottomWall.physicsBody!.contactTestBitMask = CollideType.Wall.rawValue
-            bottomWall.physicsBody!.categoryBitMask = CollideType.Wall.rawValue
-            bottomWall.physicsBody!.collisionBitMask = CollideType.Wall.rawValue
-            bottomWall.physicsBody!.isDynamic = false
-            
-            wallPair.addChild(topWall)
-            wallPair.addChild(bottomWall)
-            
-            self.addChild(wallPair)
+        let pipeOffset = CGFloat(movementAmount) - self.frame.height / 4
+
+        drawTopPipe(moveAndRemovePipes, gapHeight, pipeOffset)
+        drawBottomPipe(moveAndRemovePipes, gapHeight, pipeOffset)
+        
         }
+    }
+    
+    func drawBottomPipe(_ moveAndRemovePipes: SKAction, _ gapHeight: CGFloat, _ pipeOffset: CGFloat) -> Void {
+        let pipe2Texture = SKTexture(imageNamed: "bPipe.png")
+        let pipe2 = SKSpriteNode(texture: pipe2Texture)
+        pipe2.position = CGPoint(
+            x: self.frame.midX + self.frame.width,
+            y: self.frame.midY - pipe2Texture.size().height / 2 - gapHeight / 2  + pipeOffset
+        )
+        pipe2.run(moveAndRemovePipes)
+
+        pipe2.physicsBody = SKPhysicsBody(rectangleOf: pipe2Texture.size())
+        pipe2.physicsBody!.isDynamic = false
+
+        pipe2.physicsBody!.contactTestBitMask = CType.Plane.rawValue
+        pipe2.physicsBody!.categoryBitMask = CType.Plane.rawValue
+        pipe2.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        self.addChild(pipe2)
+    }
+    
+    func drawTopPipe(_ moveAndRemovePipes: SKAction, _ gapHeight: CGFloat, _ pipeOffset: CGFloat) -> Void {
+        let pipeTexture = SKTexture(imageNamed: "UPipe.png")
+        let pipe1 = SKSpriteNode(texture: pipeTexture)
+        pipe1.position = CGPoint(
+            x: self.frame.midX + self.frame.width,
+            y: self.frame.midY + pipeTexture.size().height / 2 + gapHeight / 2 + pipeOffset
+        )
+        pipe1.run(moveAndRemovePipes)
+
+        pipe1.physicsBody = SKPhysicsBody(rectangleOf: pipeTexture.size())
+        pipe1.physicsBody!.isDynamic = false
+        pipe1.physicsBody!.contactTestBitMask = CType.Plane.rawValue
+        pipe1.physicsBody!.categoryBitMask = CType.Plane.rawValue
+        pipe1.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        self.addChild(pipe1)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) -> Void {
