@@ -9,9 +9,12 @@ import Foundation
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    let startLabel: SKLabelNode = SKLabelNode()
     var plane: SKSpriteNode = SKSpriteNode()
     var gameOver: Bool = false
     var gameStarted: Bool = false
+    var timer: Timer = Timer()
     
     enum CType: UInt32 {
         case Plane = 1
@@ -26,7 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Call methods to draw the setup of the scene
         drawBackground()
         drawPlane()
-        drawObstacles()
+        drawPipes()
         
         // Game started, Start Time
         let timer = Timer.scheduledTimer(
@@ -57,6 +60,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ground()
         sky()
  
+    }
+    func drawStart() -> Void {
+        
+        startLabel.text = "Tap on the screen to start"
+        startLabel.fontName = "Baskerville-Bold"
+        startLabel.fontSize = 25
+        startLabel.position = CGPoint(x: self.frame.midX, y: self.frame.midY-250)
+        
+        let enlarge = SKAction.scale(by: 2, duration: 1.8)
+        let reduce = SKAction.scale(by: 0.5, duration: 1.8)
+        let enlargeAndReduce = SKAction.sequence([enlarge, reduce])
+        let animation1 = SKAction.repeatForever(enlargeAndReduce)
+        startLabel.run(animation1)
+        
+        self.addChild(startLabel)
     }
    
     func drawPlane() -> Void {
@@ -205,4 +223,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 }
 
     
-}
+
