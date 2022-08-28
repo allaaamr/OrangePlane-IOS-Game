@@ -41,6 +41,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
     }
+    func initializeGame() -> Void {
+        timer = Timer.scheduledTimer(
+            timeInterval: 3,
+             target: self,
+             selector: #selector(self.drawPipes),
+             userInfo: nil,
+             repeats: true
+        )
+
+        drawBackground()
+        drawPlane()
+        drawPipes()
+        drawStart()
+        ground()
+        sky()
+ 
+    }
    
     func drawPlane() -> Void {
         let planeTexture = SKTexture(imageNamed: "plane1.png")
@@ -175,5 +192,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func fireTimer(){
         //
     }
+    func startGame() -> Void {
+        gameOver = false
+        self.speed = 1
+    }
+
+    func resetGame() -> Void {
+        self.speed = 0
+        gameOver = true
+        timer.invalidate()
+    }
+}
+
     
 }
