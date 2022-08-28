@@ -26,7 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Call methods to draw the setup of the scene
         drawBackground()
         drawPlane()
-        drawObstacles()
+        drawPipes()
         
         // Game started, Start Time
         let timer = Timer.scheduledTimer(
@@ -135,6 +135,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(pipe1)
     }
     
+    func sky() -> Void {
+        let sky = SKNode()
+        sky.position = CGPoint(x: self.frame.midX, y: self.frame.height)
+        sky.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
+        sky.physicsBody!.isDynamic = false
+        sky.physicsBody!.contactTestBitMask = CType.Plane.rawValue
+        sky.physicsBody!.categoryBitMask = CType.Plane.rawValue
+        sky.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        self.addChild(sky)
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) -> Void {
         if gameOver == false {
             plane.physicsBody!.isDynamic = true
@@ -149,4 +160,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func fireTimer(){
         //
     }
+    
 }
