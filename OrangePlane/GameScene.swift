@@ -159,14 +159,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) -> Void {
+        startLabel.removeFromParent()
+        gameStarted = true
         if gameOver == false {
             plane.physicsBody!.isDynamic = true
-            plane.physicsBody!.velocity = CGVector(dx: 0, dy: 0)
+            plane.physicsBody!.velocity = CGVector(dx: 10, dy: 30)
             plane.physicsBody!.applyImpulse(CGVector(dx: 0, dy: 1000))
-        } else {
-//            startGame()
+        }
+        else {
+            startGame()
             removeAllChildren()
-//            initializeGame()
+            initializeGame()
         }
     }
     @objc func fireTimer(){
