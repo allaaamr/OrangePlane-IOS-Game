@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B62173C728D72A7E007638CA /* plane1.png in Resources */ = {isa = PBXBuildFile; fileRef = B62173C628D72A7E007638CA /* plane1.png */; };
+		B62173C928D72A89007638CA /* plane2.png in Resources */ = {isa = PBXBuildFile; fileRef = B62173C828D72A89007638CA /* plane2.png */; };
+		B62173CB28D72A96007638CA /* crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = B62173CA28D72A96007638CA /* crash.wav */; };
+		B62173D028D72ADF007638CA /* helicopter.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B62173CD28D72ADF007638CA /* helicopter.mp3 */; };
+		B62173D128D72ADF007638CA /* UPipe.png in Resources */ = {isa = PBXBuildFile; fileRef = B62173CE28D72ADF007638CA /* UPipe.png */; };
+		B62173D328D72AFE007638CA /* back.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B62173D228D72AFE007638CA /* back.jpeg */; };
 		B640AFB028B8FBFD008D1F1C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640AFAF28B8FBFD008D1F1C /* AppDelegate.swift */; };
 		B640AFB228B8FBFD008D1F1C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640AFB128B8FBFD008D1F1C /* SceneDelegate.swift */; };
 		B640AFB428B8FBFD008D1F1C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640AFB328B8FBFD008D1F1C /* ViewController.swift */; };
@@ -14,10 +20,15 @@
 		B640AFB928B8FBFF008D1F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B640AFB828B8FBFF008D1F1C /* Assets.xcassets */; };
 		B640AFBC28B8FBFF008D1F1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B640AFBA28B8FBFF008D1F1C /* LaunchScreen.storyboard */; };
 		B640AFC828B8FC9B008D1F1C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640AFC728B8FC9B008D1F1C /* GameScene.swift */; };
-		B640AFD028B90E68008D1F1C /* back.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B640AFCF28B90E68008D1F1C /* back.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B62173C628D72A7E007638CA /* plane1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = plane1.png; path = ../../plane1.png; sourceTree = "<group>"; };
+		B62173C828D72A89007638CA /* plane2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = plane2.png; path = ../../plane2.png; sourceTree = "<group>"; };
+		B62173CA28D72A96007638CA /* crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = crash.wav; path = ../../crash.wav; sourceTree = "<group>"; };
+		B62173CD28D72ADF007638CA /* helicopter.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = helicopter.mp3; path = ../../../helicopter.mp3; sourceTree = "<group>"; };
+		B62173CE28D72ADF007638CA /* UPipe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UPipe.png; path = ../../../UPipe.png; sourceTree = "<group>"; };
+		B62173D228D72AFE007638CA /* back.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = back.jpeg; path = ../../../back.jpeg; sourceTree = "<group>"; };
 		B640AFAC28B8FBFD008D1F1C /* OrangePlane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OrangePlane.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B640AFAF28B8FBFD008D1F1C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B640AFB128B8FBFD008D1F1C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -27,7 +38,6 @@
 		B640AFBB28B8FBFF008D1F1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B640AFBD28B8FBFF008D1F1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B640AFC728B8FC9B008D1F1C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
-		B640AFCF28B90E68008D1F1C /* back.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = back.jpeg; path = ../../../back.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +70,12 @@
 		B640AFAE28B8FBFD008D1F1C /* OrangePlane */ = {
 			isa = PBXGroup;
 			children = (
-				B640AFCF28B90E68008D1F1C /* back.jpeg */,
+				B62173CA28D72A96007638CA /* crash.wav */,
+				B62173C628D72A7E007638CA /* plane1.png */,
+				B62173C828D72A89007638CA /* plane2.png */,
+				B62173D228D72AFE007638CA /* back.jpeg */,
+				B62173CD28D72ADF007638CA /* helicopter.mp3 */,
+				B62173CE28D72ADF007638CA /* UPipe.png */,
 				B640AFC728B8FC9B008D1F1C /* GameScene.swift */,
 				B640AFAF28B8FBFD008D1F1C /* AppDelegate.swift */,
 				B640AFB128B8FBFD008D1F1C /* SceneDelegate.swift */,
@@ -131,10 +146,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62173D328D72AFE007638CA /* back.jpeg in Resources */,
 				B640AFBC28B8FBFF008D1F1C /* LaunchScreen.storyboard in Resources */,
+				B62173C728D72A7E007638CA /* plane1.png in Resources */,
 				B640AFB928B8FBFF008D1F1C /* Assets.xcassets in Resources */,
-				B640AFD028B90E68008D1F1C /* back.jpeg in Resources */,
+				B62173CB28D72A96007638CA /* crash.wav in Resources */,
+				B62173C928D72A89007638CA /* plane2.png in Resources */,
+				B62173D028D72ADF007638CA /* helicopter.mp3 in Resources */,
 				B640AFB728B8FBFD008D1F1C /* Main.storyboard in Resources */,
+				B62173D128D72ADF007638CA /* UPipe.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

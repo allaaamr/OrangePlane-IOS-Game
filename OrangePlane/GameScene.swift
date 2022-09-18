@@ -5,45 +5,34 @@
 //  Created by Alaa Amr Abdelazeem on 26/08/2022.
 //
 
-import Foundation
 import SpriteKit
+import GameplayKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    let startLabel: SKLabelNode = SKLabelNode()
     var plane: SKSpriteNode = SKSpriteNode()
+    var background: SKSpriteNode = SKSpriteNode()
+    let startLabel: SKLabelNode = SKLabelNode()
     var gameOver: Bool = false
-    var gameStarted: Bool = false
+    var gameOverLabel: SKLabelNode = SKLabelNode()
     var timer: Timer = Timer()
-    
-    enum CType: UInt32 {
+    var gameStarted:Bool = false
+    var pipesCount: Int = 0
+    var audioPlayer: AVAudioPlayer?
+
+    enum ColliderType: UInt32 {
         case Plane = 1
         case Pipe = 2
+        case Sky = 3
         case Gap = 4
     }
-    
-    override func didMove(to view: SKView) {
-        // Set the contactDelegate property in order to monitor collision and contact
+
+    override func didMove(to view: SKView) -> Void {
         self.physicsWorld.contactDelegate = self
-        
-        // Call methods to draw the setup of the scene
-        drawBackground()
-        drawPlane()
-        drawPipes()
-        
-        // Game started, Start Time
-        let timer = Timer.scheduledTimer(
-            timeInterval: 1.0,
-            target: self,
-            selector: #selector(self.fireTimer),
-            userInfo: nil,
-            repeats: true)
-        
-            
-        // Call methods to draw the setup of the scene
-        
-        
+        initializeGame()
     }
+
     func initializeGame() -> Void {
         timer = Timer.scheduledTimer(
             timeInterval: 3,
@@ -52,7 +41,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
              userInfo: nil,
              repeats: true
         )
-
+        
+        
         drawBackground()
         drawPlane()
         drawPipes()
@@ -61,6 +51,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sky()
  
     }
+    
+    func playSound(sound:String, ext:String) {
+        if let path = Bundle.main.path(forResource: sound, ofType: ext) {
+            do {
+                audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+                audioPlayer?.play()
+            } catch {
+                print("ERROR")
+            }
+        }
+    }
+
     func drawStart() -> Void {
         
         startLabel.text = "Tap on the screen to start"
@@ -76,7 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(startLabel)
     }
-   
+    
     func drawPlane() -> Void {
         let planeTexture = SKTexture(imageNamed: "plane1.png")
         let planeTexture2 = SKTexture(imageNamed: "plane2.png")
@@ -87,15 +89,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         plane.run(planeFlying)
         plane.physicsBody = SKPhysicsBody(circleOfRadius: planeTexture.size().height / 2)
         plane.physicsBody!.isDynamic = false
-        plane.physicsBody!.contactTestBitMask = CType.Pipe.rawValue
-        plane.physicsBody!.categoryBitMask = CType.Plane.rawValue
-        plane.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        plane.physicsBody!.contactTestBitMask = ColliderType.Pipe.rawValue
+        plane.physicsBody!.categoryBitMask = ColliderType.Plane.rawValue
+        plane.physicsBody!.collisionBitMask = ColliderType.Plane.rawValue
         self.addChild(plane)
         
     }
-   
-    func drawBackground(){
+    
+    func ground() -> Void {
+        let ground = SKNode()
+        ground.position = CGPoint(x: self.frame.midX, y: -self.frame.height / 2)
+        ground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
+        ground.physicsBody!.isDynamic = false
+        ground.physicsBody!.contactTestBitMask = ColliderType.Plane.rawValue
+        ground.physicsBody!.categoryBitMask = ColliderType.Plane.rawValue
+        ground.physicsBody!.collisionBitMask = ColliderType.Plane.rawValue
+
+        self.addChild(ground)
+    }
+    
+    func sky() -> Void {
+        let sky = SKNode()
+        sky.position = CGPoint(x: self.frame.midX, y: self.frame.height)
+        sky.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
+        sky.physicsBody!.isDynamic = false
+        sky.physicsBody!.contactTestBitMask = ColliderType.Plane.rawValue
+        sky.physicsBody!.categoryBitMask = ColliderType.Plane.rawValue
+        sky.physicsBody!.collisionBitMask = ColliderType.Plane.rawValue
+        self.addChild(sky)
+    }
+
+    func drawBackground() -> Void {
         let backgroundTexture = SKTexture(imageNamed: "back.jpeg")
+        
         for i in 0 ... 1 {
             let background = SKSpriteNode(texture: backgroundTexture)
             background.zPosition = -30
@@ -110,8 +136,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             background.run(moveForever)
         }
+//
     }
-    
+
     @objc func drawPipes() -> Void {
  
         if(gameStarted){
@@ -122,11 +149,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         )
 
         let removePipes = SKAction.removeFromParent()
-
         let movementAmount = arc4random() % UInt32(self.frame.height / 2)
-
         let moveAndRemovePipes = SKAction.sequence([movePipes, removePipes])
-
         let pipeOffset = CGFloat(movementAmount) - self.frame.height / 4
 
         drawTopPipe(moveAndRemovePipes, gapHeight, pipeOffset)
@@ -134,25 +158,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         }
     }
-    
-    func drawBottomPipe(_ moveAndRemovePipes: SKAction, _ gapHeight: CGFloat, _ pipeOffset: CGFloat) -> Void {
-        let pipe2Texture = SKTexture(imageNamed: "bPipe.png")
-        let pipe2 = SKSpriteNode(texture: pipe2Texture)
-        pipe2.position = CGPoint(
-            x: self.frame.midX + self.frame.width,
-            y: self.frame.midY - pipe2Texture.size().height / 2 - gapHeight / 2  + pipeOffset
-        )
-        pipe2.run(moveAndRemovePipes)
 
-        pipe2.physicsBody = SKPhysicsBody(rectangleOf: pipe2Texture.size())
-        pipe2.physicsBody!.isDynamic = false
-
-        pipe2.physicsBody!.contactTestBitMask = CType.Plane.rawValue
-        pipe2.physicsBody!.categoryBitMask = CType.Plane.rawValue
-        pipe2.physicsBody!.collisionBitMask = CType.Plane.rawValue
-        self.addChild(pipe2)
-    }
-    
     func drawTopPipe(_ moveAndRemovePipes: SKAction, _ gapHeight: CGFloat, _ pipeOffset: CGFloat) -> Void {
         let pipeTexture = SKTexture(imageNamed: "UPipe.png")
         let pipe1 = SKSpriteNode(texture: pipeTexture)
@@ -164,52 +170,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         pipe1.physicsBody = SKPhysicsBody(rectangleOf: pipeTexture.size())
         pipe1.physicsBody!.isDynamic = false
-        pipe1.physicsBody!.contactTestBitMask = CType.Plane.rawValue
-        pipe1.physicsBody!.categoryBitMask = CType.Plane.rawValue
-        pipe1.physicsBody!.collisionBitMask = CType.Plane.rawValue
+        pipe1.physicsBody!.contactTestBitMask = ColliderType.Plane.rawValue
+        pipe1.physicsBody!.categoryBitMask = ColliderType.Plane.rawValue
+        pipe1.physicsBody!.collisionBitMask = ColliderType.Plane.rawValue
         self.addChild(pipe1)
     }
-    
-    func sky() -> Void {
-        let sky = SKNode()
-        sky.position = CGPoint(x: self.frame.midX, y: self.frame.height)
-        sky.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
-        sky.physicsBody!.isDynamic = false
-        sky.physicsBody!.contactTestBitMask = CType.Plane.rawValue
-        sky.physicsBody!.categoryBitMask = CType.Plane.rawValue
-        sky.physicsBody!.collisionBitMask = CType.Plane.rawValue
-        self.addChild(sky)
+
+    func drawBottomPipe(_ moveAndRemovePipes: SKAction, _ gapHeight: CGFloat, _ pipeOffset: CGFloat) -> Void {
+        let pipe2Texture = SKTexture(imageNamed: "bPipe.png")
+        let pipe2 = SKSpriteNode(texture: pipe2Texture)
+        pipe2.position = CGPoint(
+            x: self.frame.midX + self.frame.width,
+            y: self.frame.midY - pipe2Texture.size().height / 2 - gapHeight / 2  + pipeOffset
+        )
+        pipe2.run(moveAndRemovePipes)
+
+        pipe2.physicsBody = SKPhysicsBody(rectangleOf: pipe2Texture.size())
+        pipe2.physicsBody!.isDynamic = false
+        pipe2.physicsBody!.contactTestBitMask = ColliderType.Plane.rawValue
+        pipe2.physicsBody!.categoryBitMask = ColliderType.Plane.rawValue
+        pipe2.physicsBody!.collisionBitMask = ColliderType.Plane.rawValue
+        self.addChild(pipe2)
     }
 
-    func ground() -> Void {
-        let ground = SKNode()
-        ground.position = CGPoint(x: self.frame.midX, y: -self.frame.height / 2)
-        ground.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width, height: 1))
-        ground.physicsBody!.isDynamic = false
-        ground.physicsBody!.contactTestBitMask = CType.Plane.rawValue
-        ground.physicsBody!.categoryBitMask = CType.Plane.rawValue
-        ground.physicsBody!.collisionBitMask = CType.Plane.rawValue
-
-        self.addChild(ground)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) -> Void {
-        startLabel.removeFromParent()
-        gameStarted = true
+    func didBegin(_ contact: SKPhysicsContact) -> Void {
+        
         if gameOver == false {
-            plane.physicsBody!.isDynamic = true
-            plane.physicsBody!.velocity = CGVector(dx: 10, dy: 30)
-            plane.physicsBody!.applyImpulse(CGVector(dx: 0, dy: 1000))
-        }
-        else {
-            startGame()
-            removeAllChildren()
-            initializeGame()
+            if contact.bodyA.categoryBitMask == ColliderType.Gap.rawValue ||
+                contact.bodyB.categoryBitMask == ColliderType.Gap.rawValue
+            {
+                pipesCount += 1
+                
+            } else {
+                audioPlayer?.stop()
+                resetGame()
+                gameOverLabel.text = "You Lost"
+                gameOverLabel.position = CGPoint(x: self.frame.midY, y: self.frame.midY)
+                gameOverLabel.fontName = "Helvetica"
+                gameOverLabel.fontSize = 50
+                self.addChild(gameOverLabel)
+                playSound(sound:"crash", ext:"wav")
+            }
         }
     }
-    @objc func fireTimer(){
-        //
-    }
+    
     func startGame() -> Void {
         gameOver = false
         self.speed = 1
@@ -220,7 +224,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOver = true
         timer.invalidate()
     }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) -> Void {
+        
+        startLabel.removeFromParent()
+        gameStarted = true
+        if gameOver == false {
+            playSound(sound:"helicopter", ext: "mp3")
+            plane.physicsBody!.isDynamic = true
+            plane.physicsBody!.velocity = CGVector(dx: 10, dy: 30)
+            plane.physicsBody!.applyImpulse(CGVector(dx: 0, dy: 1000))
+        }
+
+    }
+
+
 }
-
-    
-
